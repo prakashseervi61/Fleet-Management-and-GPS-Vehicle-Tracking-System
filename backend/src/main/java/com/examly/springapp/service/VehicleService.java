@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Vehicle registration and management (SRS FR4) with duplicate detection.
- */
+ 
+
+
 @Service
 public class VehicleService {
 
@@ -33,11 +33,11 @@ public class VehicleService {
     @Autowired
     private GpsPingRepository gpsPingRepository;
 
-    /**
-     * Register a vehicle, rejecting duplicate registration numbers or GPS device ids.
-     * @param request vehicle payload
-     * @return the created vehicle
-     */
+     
+
+
+
+
     @Transactional
     public Vehicle createVehicle(VehicleRequest request) {
         if (vehicleRepository.existsByRegistrationNo(request.getRegistrationNo())) {
@@ -62,12 +62,12 @@ public class VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
-    /**
-     * Assign a driver (role DRIVER) to a vehicle.
-     * @param vehicleId the vehicle id
-     * @param driverId the driver user id
-     * @return the updated vehicle
-     */
+     
+
+
+
+
+
     @Transactional
     public Vehicle assignDriver(Long vehicleId, Long driverId) {
         Vehicle vehicle = getVehicleEntity(vehicleId);
@@ -141,11 +141,11 @@ public class VehicleService {
         vehicleRepository.delete(vehicle);
     }
 
-    /**
-     * Latest GPS location for a vehicle (Appendix H GET /api/vehicles/{id}/location).
-     * @param vehicleId the vehicle id
-     * @return location response
-     */
+     
+
+
+
+
     public VehicleLocationResponse getVehicleLocation(Long vehicleId) {
         Vehicle vehicle = getVehicleEntity(vehicleId);
         GpsPing latest = gpsPingRepository.findTopByVehicleIdOrderByRecordedAtDesc(vehicleId)

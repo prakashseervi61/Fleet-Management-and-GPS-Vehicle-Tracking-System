@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
-/**
- * Geo-fence alert entity recording vehicle entry/exit events.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

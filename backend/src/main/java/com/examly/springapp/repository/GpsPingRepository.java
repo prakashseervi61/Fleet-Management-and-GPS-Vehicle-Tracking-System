@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for GpsPing entity.
- */
+ 
+
+
 @Repository
 public interface GpsPingRepository extends JpaRepository<GpsPing, Long> {
 

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Spring Data JPA repository for GeoFenceAlert entity.
- */
+ 
+
+
 @Repository
 public interface GeoFenceAlertRepository extends JpaRepository<GeoFenceAlert, Long> {
 

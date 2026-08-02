@@ -16,10 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Preventive maintenance scheduling (SRS 1.2, Appendix F):
- * triggers by SCHEDULE, ODOMETER and OBD; vehicle blocked from trips while IN_PROGRESS.
- */
+ 
+
+
+
 @Service
 public class MaintenanceService {
 
@@ -72,11 +72,11 @@ public class MaintenanceService {
         return maintenanceOrderRepository.save(order);
     }
 
-    /**
-     * ODOMETER trigger: create a scheduled order for every vehicle whose odometer
-     * has reached the configured interval and has no open order (SRS Appendix F).
-     * @return orders created
-     */
+     
+
+
+
+
     @Transactional
     public List<MaintenanceOrder> generateOdometerTriggers() {
         List<MaintenanceOrder> created = new java.util.ArrayList<>();
@@ -102,12 +102,12 @@ public class MaintenanceService {
         return created;
     }
 
-    /**
-     * OBD trigger: an OBD fault creates an immediate work order (SRS 1.2).
-     * @param vehicleId the vehicle id
-     * @param faultCode the diagnostic fault code
-     * @return the created order
-     */
+     
+
+
+
+
+
     @Transactional
     public MaintenanceOrder createObdTriggeredOrder(Long vehicleId, String faultCode) {
         MaintenanceRequest request = new MaintenanceRequest(

@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-/**
- * GPS ping ingestion: coordinate bounds, event classification
- * (SPEEDING / HARSH_BRAKE / IDLE / GEO_EXIT) and geofence override.
- */
+ 
+
+
+
 @ExtendWith(MockitoExtension.class)
 class GpsPingServiceTest {
 

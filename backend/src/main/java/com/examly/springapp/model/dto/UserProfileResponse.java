@@ -7,9 +7,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Profile DTO exposing user data without the password hash.
- */
+ 
+
+
 @Getter
 @Setter
 public class UserProfileResponse {

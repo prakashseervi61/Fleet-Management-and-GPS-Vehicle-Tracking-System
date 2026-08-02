@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/**
- * Loads user details by email, phone number, or numeric user id (FR2 multi-credential login).
- */
+ 
+
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -26,11 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new UserPrincipal(user);
     }
 
-    /**
-     * Resolve a user by email, 10-digit phone number, or numeric user id.
-     * @param identifier the login identifier
-     * @return Optional containing the user if found
-     */
+     
+
+
+
+
     public Optional<User> findByIdentifier(String identifier) {
         if (identifier == null || identifier.isBlank()) {
             return Optional.empty();
@@ -46,7 +46,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             try {
                 return userRepository.findById(Long.parseLong(trimmed));
             } catch (NumberFormatException ignored) {
-                // fall through to email lookup
+                
             }
         }
         return userRepository.findByEmail(trimmed);

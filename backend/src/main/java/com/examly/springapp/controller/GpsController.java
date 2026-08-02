@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * GPS telemetry ingestion and history (SRS 2.2/2.5, Appendix H).
- */
+ 
+
+
 @RestController
 @RequestMapping("/api/gps")
 public class GpsController {

@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Vehicle entity. Based on Appendix B: Vehicles Table in SRS.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

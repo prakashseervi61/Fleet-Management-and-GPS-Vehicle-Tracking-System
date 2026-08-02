@@ -20,11 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-/**
- * Spring Security configuration class.
- * Implements JWT-based authentication (SRS 2.4/2.5), CORS (SRS 3.1.4)
- * and RBAC via method security.
- */
+ 
+
+
+
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -65,9 +65,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * CORS configuration allowing the React frontend (port 8081) as per SRS 3.1.4.
-     */
+     
+
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

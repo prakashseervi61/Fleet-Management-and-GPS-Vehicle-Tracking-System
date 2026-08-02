@@ -2,9 +2,9 @@ package com.examly.springapp.service;
 
 import java.math.BigDecimal;
 
-/**
- * Geodesic helpers used for geofence radius checks and distance calculations.
- */
+ 
+
+
 public final class GeoUtils {
 
     private static final double EARTH_RADIUS_KM = 6371.0;
@@ -12,9 +12,9 @@ public final class GeoUtils {
     private GeoUtils() {
     }
 
-    /**
-     * Haversine distance between two coordinates in kilometres.
-     */
+     
+
+
     public static double distanceKm(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
@@ -25,9 +25,9 @@ public final class GeoUtils {
         return EARTH_RADIUS_KM * c;
     }
 
-    /**
-     * Whether a point lies inside a circular geofence.
-     */
+     
+
+
     public static boolean isInside(BigDecimal fenceLat, BigDecimal fenceLon, BigDecimal radiusKm,
                                    BigDecimal pointLat, BigDecimal pointLon) {
         double distance = distanceKm(fenceLat.doubleValue(), fenceLon.doubleValue(),

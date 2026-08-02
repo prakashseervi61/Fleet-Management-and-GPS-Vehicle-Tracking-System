@@ -5,9 +5,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * Driver behaviour score response (speeding, braking, idling).
- */
+ 
+
+
 @Getter
 @Setter
 public class DriverScoreResponse {

@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 
-/**
- * Compliance document entity (RC, insurance, PUC, fitness).
- * Based on FR7 Document and Compliance Management.
- */
+ 
+
+
+
 @Entity
 @Getter
 @Setter

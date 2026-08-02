@@ -12,9 +12,9 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-/**
- * Request DTO for geo-fence zone configuration.
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

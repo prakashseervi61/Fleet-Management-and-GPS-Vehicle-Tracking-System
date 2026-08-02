@@ -10,9 +10,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/**
- * Request DTO for fuel log entries.
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * In-memory JWT blacklist (SRS FR2 token blacklisting on logout).
- * Tokens are evicted once their recorded expiration passes.
- */
+ 
+
+
+
 @Service
 public class TokenBlacklistService {
 

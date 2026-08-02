@@ -12,10 +12,10 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
-/**
- * Global exception handler for REST APIs.
- * Handles custom exceptions defined in Appendix E of SRS plus framework-level errors.
- */
+ 
+
+
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -93,9 +93,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, status);
     }
 
-    /**
-     * Error details structure for API responses.
-     */
+     
+
+
     public static class ErrorDetails {
         private Date timestamp;
         private String message;

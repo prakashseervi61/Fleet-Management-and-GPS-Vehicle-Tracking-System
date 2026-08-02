@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * JWT authentication response returned on successful login.
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

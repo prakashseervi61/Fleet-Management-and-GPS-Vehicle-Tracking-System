@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Geo-fence zones and entry/exit alerts (SRS 1.2 geo-fence alerts).
- */
+ 
+
+
 @RestController
 @RequestMapping("/api/geofence")
 public class GeoFenceController {

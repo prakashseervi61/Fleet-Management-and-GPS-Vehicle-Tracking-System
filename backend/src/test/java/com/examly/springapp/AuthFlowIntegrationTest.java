@@ -18,10 +18,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * End-to-end flows against the real context (H2): registration, JWT login,
- * RBAC-protected endpoints, duplicate detection and GPS ingestion.
- */
+ 
+
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -71,7 +71,7 @@ class AuthFlowIntegrationTest {
         String managerToken = login(managerEmail);
         String driverToken = login(driverEmail);
 
-        // Fleet manager registers a vehicle
+        
         String vehicleBody = """
                 {"registrationNo":"KA01XY%s","make":"Tata","model":"Ace","gpsDeviceId":"GPS%s","currentOdometer":1000}
                 """.formatted(suffix.substring(suffix.length() - 4), suffix.substring(suffix.length() - 4));
@@ -84,14 +84,14 @@ class AuthFlowIntegrationTest {
                 .andReturn();
         long vehicleId = objectMapper.readTree(vehicleResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // Duplicate registration number is rejected with 409
+        
         mockMvc.perform(post("/api/vehicles")
                         .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(vehicleBody))
                 .andExpect(status().isConflict());
 
-        // Driver reports a GPS ping for the vehicle
+        
         String pingBody = """
                 {"vehicleId":%d,"latitude":28.6139,"longitude":77.2090,"speedKmh":60}
                 """.formatted(vehicleId);
@@ -102,7 +102,7 @@ class AuthFlowIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.eventType").value("NORMAL"));
 
-        // Manager fetches the live location
+        
         mockMvc.perform(get("/api/vehicles/{id}/location", vehicleId)
                         .header("Authorization", "Bearer " + managerToken))
                 .andExpect(status().isOk())

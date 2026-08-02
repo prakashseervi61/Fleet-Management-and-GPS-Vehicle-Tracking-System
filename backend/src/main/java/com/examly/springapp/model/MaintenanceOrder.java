@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/**
- * Maintenance order entity. Based on Appendix B: MaintenanceOrders Table in SRS.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Spring Data JPA repository for MaintenanceOrder entity.
- */
+ 
+
+
 @Repository
 public interface MaintenanceOrderRepository extends JpaRepository<MaintenanceOrder, Long> {
 

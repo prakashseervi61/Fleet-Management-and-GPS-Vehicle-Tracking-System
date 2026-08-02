@@ -16,9 +16,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Fuel log management and cost tracking (SRS 1.2 fuel card reconciliation).
- */
+ 
+
+
 @Service
 public class FuelLogService {
 
@@ -69,9 +69,9 @@ public class FuelLogService {
         return fuelLogRepository.findByDriverId(driverId);
     }
 
-    /**
-     * Total fuel cost across a date range for finance reporting.
-     */
+     
+
+
     public BigDecimal getTotalFuelCost(LocalDate from, LocalDate to) {
         LocalDate start = from != null ? from : LocalDate.of(1900, 1, 1);
         LocalDate end = to != null ? to : LocalDate.now();

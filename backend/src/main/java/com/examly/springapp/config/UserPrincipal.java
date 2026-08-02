@@ -9,10 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Spring Security principal wrapping a User entity.
- * Exposes the raw user id and role for authorization and JWT claims.
- */
+ 
+
+
+
 public class UserPrincipal implements UserDetails {
 
     @Getter

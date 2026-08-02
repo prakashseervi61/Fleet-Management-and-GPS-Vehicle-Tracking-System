@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Trip entity. Based on Appendix B: Trips Table in SRS.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

@@ -23,9 +23,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Trip assignment and lifecycle (SRS FR6) enforcing Appendix F business rules.
- */
+ 
+
+
 @Service
 public class TripService {
 
@@ -50,12 +50,12 @@ public class TripService {
     @Value("${fleet.gps.stale-minutes:5}")
     private long gpsStaleMinutes;
 
-    /**
-     * Assign a trip enforcing: driver role + valid licence, no double-assignment,
-     * no IN_PROGRESS maintenance, and valid vehicle documents (Appendix F).
-     * @param request trip payload
-     * @return the created trip with status ASSIGNED
-     */
+     
+
+
+
+
+
     @Transactional
     public Trip createTrip(TripRequest request) {
         Vehicle vehicle = vehicleRepository.findById(request.getVehicleId())

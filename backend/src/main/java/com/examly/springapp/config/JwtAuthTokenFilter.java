@@ -16,10 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
- * Extracts the Bearer JWT, validates it, and populates the SecurityContext
- * for authenticated requests (SRS 3.1.4 JWT HMAC-SHA256 verification on every request).
- */
+ 
+
+
+
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
@@ -47,7 +47,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception ignored) {
-                // invalid token: leave SecurityContext unauthenticated
+                
             }
         }
         filterChain.doFilter(request, response);

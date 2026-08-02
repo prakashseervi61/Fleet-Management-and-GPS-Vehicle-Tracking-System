@@ -28,9 +28,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Registration validation (Appendix C + password policy) and multi-credential login.
- */
+ 
+
+
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 

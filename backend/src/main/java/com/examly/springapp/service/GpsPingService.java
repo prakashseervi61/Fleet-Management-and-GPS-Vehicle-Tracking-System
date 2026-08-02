@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * GPS ping ingestion with outlier rejection and event classification
- * (SPEEDING, IDLE, HARSH_BRAKE, GEO_EXIT; SRS 1.2 driver behaviour monitoring).
- */
+ 
+
+
+
 @Service
 public class GpsPingService {
 
@@ -40,12 +40,12 @@ public class GpsPingService {
     @Value("${fleet.speeding-threshold-kmh:80}")
     private int speedingThresholdKmh;
 
-    /**
-     * Ingest a ping: validate bounds, classify the event, detect geofence crossings.
-     * Outlier coordinates are rejected before storage (SRS 2.5).
-     * @param request ping payload
-     * @return the stored ping
-     */
+     
+
+
+
+
+
     @Transactional
     public GpsPing ingestPing(GpsPingRequest request) {
         validateCoordinates(request);
@@ -74,9 +74,9 @@ public class GpsPingService {
         return gpsPingRepository.save(ping);
     }
 
-    /**
-     * Reject out-of-range coordinates before storage (SRS 2.5).
-     */
+     
+
+
     private void validateCoordinates(GpsPingRequest request) {
         if (request.getLatitude() == null || request.getLongitude() == null) {
             throw new IllegalArgumentException("Latitude and longitude are required");
@@ -94,9 +94,9 @@ public class GpsPingService {
         }
     }
 
-    /**
-     * Classify event type from current speed, previous speed and time delta.
-     */
+     
+
+
     GpsPing.EventType classifyEvent(BigDecimal speedKmh, Optional<GpsPing> previous, LocalDateTime recordedAt) {
         if (speedKmh.compareTo(BigDecimal.valueOf(speedingThresholdKmh)) >= 0) {
             return GpsPing.EventType.SPEEDING;

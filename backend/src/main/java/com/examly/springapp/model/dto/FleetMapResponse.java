@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Fleet map entry: vehicle with its latest known GPS position (Appendix H GET /api/fleet/map).
- */
+ 
+
+
 @Getter
 @Setter
 public class FleetMapResponse {

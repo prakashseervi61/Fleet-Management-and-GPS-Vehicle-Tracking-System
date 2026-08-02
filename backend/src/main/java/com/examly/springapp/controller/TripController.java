@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Trip assignment and lifecycle (SRS FR6, Appendix H).
- */
+ 
+
+
 @RestController
 @RequestMapping("/api/trips")
 public class TripController {

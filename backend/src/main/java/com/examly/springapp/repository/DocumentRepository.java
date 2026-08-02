@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for compliance Document entity.
- */
+ 
+
+
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 

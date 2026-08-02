@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * GPS ping entity. Based on Appendix B: GPSPings Table in SRS.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

@@ -6,10 +6,10 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * User entity representing system users.
- * Based on Appendix B: Users Table in SRS.
- */
+ 
+
+
+
 @Entity
 @Getter
 @Setter
@@ -51,9 +51,9 @@ public class User {
     @Column(name = "licence_expiry_date")
     private LocalDate licenceExpiryDate;
 
-    /**
-     * User roles based on SRS section 2.3 User Classes and Characteristics
-     */
+     
+
+
     public enum Role {
         GUEST,
         DRIVER,

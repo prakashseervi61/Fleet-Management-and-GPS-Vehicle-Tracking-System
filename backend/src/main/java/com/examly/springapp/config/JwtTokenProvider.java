@@ -12,10 +12,10 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-/**
- * Generates, validates and parses HS256 JWT tokens with role-specific expiry
- * (SRS Appendix D): 8h for users, 12h for staff, 24h for admins.
- */
+ 
+
+
+
 @Component
 public class JwtTokenProvider {
 
@@ -34,12 +34,12 @@ public class JwtTokenProvider {
         this.adminExpirationMs = adminExpirationMs;
     }
 
-    /**
-     * Generate a token for the given user with role-specific validity.
-     * Claims: userId, role, email, issuedAt, expiration.
-     * @param user the authenticated user
-     * @return signed JWT string
-     */
+     
+
+
+
+
+
     public String generateToken(User user) {
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + getExpirationMillis(user.getRole()));
@@ -54,11 +54,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /**
-     * Validate the token signature and expiration.
-     * @param token the JWT string
-     * @return true if valid
-     */
+     
+
+
+
+
     public boolean validateToken(String token) {
         try {
             parseClaims(token);
@@ -68,11 +68,11 @@ public class JwtTokenProvider {
         }
     }
 
-    /**
-     * Parse token claims.
-     * @param token the JWT string
-     * @return claims body
-     */
+     
+
+
+
+
     public Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -81,11 +81,11 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    /**
-     * Extract user id from token.
-     * @param token the JWT string
-     * @return user id
-     */
+     
+
+
+
+
     public Long getUserIdFromToken(String token) {
         Object userId = parseClaims(token).get("userId");
         if (userId instanceof Number number) {
@@ -94,38 +94,38 @@ public class JwtTokenProvider {
         return Long.valueOf(String.valueOf(userId));
     }
 
-    /**
-     * Extract role from token.
-     * @param token the JWT string
-     * @return role name
-     */
+     
+
+
+
+
     public String getRoleFromToken(String token) {
         return String.valueOf(parseClaims(token).get("role"));
     }
 
-    /**
-     * Extract email (subject) from token.
-     * @param token the JWT string
-     * @return email
-     */
+     
+
+
+
+
     public String getEmailFromToken(String token) {
         return parseClaims(token).getSubject();
     }
 
-    /**
-     * Extract expiration timestamp from token.
-     * @param token the JWT string
-     * @return expiration date
-     */
+     
+
+
+
+
     public Date getExpirationFromToken(String token) {
         return parseClaims(token).getExpiration();
     }
 
-    /**
-     * Role-specific expiry duration in milliseconds (SRS Appendix D).
-     * @param role the user role
-     * @return expiry millis
-     */
+     
+
+
+
+
     public long getExpirationMillis(User.Role role) {
         if (role == User.Role.SYSTEM_ADMINISTRATOR || role == User.Role.FLEET_MANAGER) {
             return adminExpirationMs;

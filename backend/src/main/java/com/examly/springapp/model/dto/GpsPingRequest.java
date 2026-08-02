@@ -12,10 +12,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Request DTO for GPS ping ingestion (30-second refresh, SRS 2.2).
- * Outlier coordinates are rejected before storage (SRS 2.5).
- */
+ 
+
+
+
 @Getter
 @Setter
 @NoArgsConstructor

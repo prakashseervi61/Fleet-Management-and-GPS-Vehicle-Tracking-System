@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Vehicle registration and management (SRS FR4, Appendix H).
- * Fleet managers register vehicles; dispatchers and above can read fleet data.
- */
+ 
+
+
+
 @RestController
 @RequestMapping("/api/vehicles")
 public class VehicleController {

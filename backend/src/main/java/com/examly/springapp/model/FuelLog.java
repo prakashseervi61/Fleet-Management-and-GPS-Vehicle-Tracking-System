@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/**
- * Fuel log entity for fuel card reconciliation and efficiency tracking.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

@@ -7,9 +7,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-/**
- * Document expiry alert DTO (SRS FR7: alerts at 60, 30 and 7 days).
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

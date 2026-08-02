@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Geo-fence configuration and entry/exit alert detection (SRS 1.2 geo-fence alerts).
- */
+ 
+
+
 @Service
 public class GeoFenceService {
 
@@ -65,13 +65,13 @@ public class GeoFenceService {
         geoFenceRepository.delete(getGeoFence(id));
     }
 
-    /**
-     * Compare a new ping against every fence and emit ENTRY/EXIT alerts
-     * when the inside-state changes for a vehicle.
-     * @param ping the newly received ping (lat/lon must be set)
-     * @param vehicle the vehicle
-     * @return alerts created by this ping
-     */
+     
+
+
+
+
+
+
     @Transactional
     public List<GeoFenceAlert> detectCrossings(GpsPing ping, Vehicle vehicle) {
         List<GeoFenceAlert> alerts = new ArrayList<>();

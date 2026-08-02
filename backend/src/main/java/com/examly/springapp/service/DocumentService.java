@@ -18,10 +18,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Compliance document management (SRS FR7): expiry alerts at 60/30/7 days
- * and compliance checks that suspend vehicles from trip assignment.
- */
+ 
+
+
+
 @Service
 public class DocumentService {
 
@@ -96,9 +96,9 @@ public class DocumentService {
         documentRepository.delete(document);
     }
 
-    /**
-     * Expiry alerts grouped by window (60, 30 and 7 days) per SRS Appendix F.
-     */
+     
+
+
     public Map<Integer, List<ExpiryAlertResponse>> getExpiryAlerts() {
         Map<Integer, List<ExpiryAlertResponse>> result = new LinkedHashMap<>();
         LocalDate today = LocalDate.now();
@@ -118,10 +118,10 @@ public class DocumentService {
         return result;
     }
 
-    /**
-     * Compliance check: RC, insurance, PUC and fitness must exist and be unexpired
-     * (SRS Appendix F Vehicle Rules). Expired documents suspend the vehicle.
-     */
+     
+
+
+
     public boolean isCompliant(Long vehicleId) {
         for (Document.DocumentType type : REQUIRED_TYPES) {
             Document doc = documentRepository.findByVehicleIdAndType(vehicleId, type).orElse(null);
@@ -132,9 +132,9 @@ public class DocumentService {
         return true;
     }
 
-    /**
-     * Recompute document statuses and flag expired documents.
-     */
+     
+
+
     @Transactional
     public void refreshDocumentStatuses() {
         for (Document doc : documentRepository.findAll()) {

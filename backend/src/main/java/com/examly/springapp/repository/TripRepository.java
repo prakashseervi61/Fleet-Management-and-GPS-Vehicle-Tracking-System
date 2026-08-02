@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for Trip entity.
- */
+ 
+
+
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
 

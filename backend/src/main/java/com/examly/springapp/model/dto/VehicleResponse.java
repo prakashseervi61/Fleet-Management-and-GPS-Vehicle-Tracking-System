@@ -4,9 +4,9 @@ import com.examly.springapp.model.Vehicle;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Response DTO for vehicle records.
- */
+ 
+
+
 @Getter
 @Setter
 public class VehicleResponse {

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Spring Data JPA repository for FuelLog entity.
- */
+ 
+
+
 @Repository
 public interface FuelLogRepository extends JpaRepository<FuelLog, Long> {
 

@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Generic message response for simple endpoints (register, logout, etc.).
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

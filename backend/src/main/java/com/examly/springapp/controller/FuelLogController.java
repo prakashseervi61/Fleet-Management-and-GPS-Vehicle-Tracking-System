@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Fuel log entries and finance reporting (SRS 1.2 fuel card reconciliation).
- */
+ 
+
+
 @RestController
 @RequestMapping("/api/fuel/log")
 public class FuelLogController {

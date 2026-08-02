@@ -19,10 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Coverage for the complete-CRUD endpoints added after the initial build:
- * PUT/DELETE for geo-fences, documents, fuel logs and maintenance orders.
- */
+ 
+
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -107,7 +107,7 @@ class CrudCompletenessIntegrationTest {
                 .andReturn();
         long fenceId = objectMapper.readTree(created.getResponse().getContentAsString()).get("id").asLong();
 
-        // Update radius and name -> 200
+        
         mockMvc.perform(put("/api/geofence/{id}", fenceId)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ class CrudCompletenessIntegrationTest {
                 .andExpect(jsonPath("$.name").value("Renamed Depot"))
                 .andExpect(jsonPath("$.radiusKm").value(12));
 
-        // Unknown fence -> 404
+        
         mockMvc.perform(put("/api/geofence/{id}", 999_999_999L)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -127,7 +127,7 @@ class CrudCompletenessIntegrationTest {
                                 """))
                 .andExpect(status().isNotFound());
 
-        // Delete -> 204, then 404
+        
         mockMvc.perform(delete("/api/geofence/{id}", fenceId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isNoContent());
@@ -158,7 +158,7 @@ class CrudCompletenessIntegrationTest {
                 .andReturn();
         long docId = objectMapper.readTree(created.getResponse().getContentAsString()).get("id").asLong();
 
-        // Update type -> 200
+        
         mockMvc.perform(put("/api/documents/{id}", docId)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -169,7 +169,7 @@ class CrudCompletenessIntegrationTest {
                 .andExpect(jsonPath("$.type").value("INSURANCE"))
                 .andExpect(jsonPath("$.status").value("VALID"));
 
-        // Unknown document -> 404
+        
         mockMvc.perform(put("/api/documents/{id}", 999_999_999L)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -178,7 +178,7 @@ class CrudCompletenessIntegrationTest {
                                 """.formatted(vehicleId, FAR_FUTURE)))
                 .andExpect(status().isNotFound());
 
-        // Driver cannot update documents -> 403
+        
         mockMvc.perform(put("/api/documents/{id}", docId)
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -187,7 +187,7 @@ class CrudCompletenessIntegrationTest {
                                 """.formatted(vehicleId, FAR_FUTURE)))
                 .andExpect(status().isForbidden());
 
-        // Delete -> 204, then 404
+        
         mockMvc.perform(delete("/api/documents/{id}", docId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isNoContent());
@@ -220,18 +220,18 @@ class CrudCompletenessIntegrationTest {
                 .andReturn();
         long logId = objectMapper.readTree(created.getResponse().getContentAsString()).get("id").asLong();
 
-        // Get by id -> 200
+        
         mockMvc.perform(get("/api/fuel/log/{id}", logId)
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(logId));
 
-        // Unknown log -> 404
+        
         mockMvc.perform(get("/api/fuel/log/{id}", 999_999_999L)
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isNotFound());
 
-        // Delete -> 204, then 404
+        
         mockMvc.perform(delete("/api/fuel/log/{id}", logId)
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isNoContent());
@@ -239,7 +239,7 @@ class CrudCompletenessIntegrationTest {
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isNotFound());
 
-        // Driver cannot delete logs -> 403
+        
         mockMvc.perform(delete("/api/fuel/log/{id}", logId)
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isForbidden());
@@ -267,13 +267,13 @@ class CrudCompletenessIntegrationTest {
                 .andReturn();
         long orderId = objectMapper.readTree(created.getResponse().getContentAsString()).get("id").asLong();
 
-        // Vehicle is in MAINTENANCE while the order is open
+        
         mockMvc.perform(get("/api/vehicles/{id}", vehicleId)
                         .header("Authorization", bearer(fleetMgr.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("MAINTENANCE"));
 
-        // Update -> 200
+        
         mockMvc.perform(put("/api/maintenance/{id}", orderId)
                         .header("Authorization", bearer(maint.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -284,7 +284,7 @@ class CrudCompletenessIntegrationTest {
                 .andExpect(jsonPath("$.serviceType").value("Brake pads"))
                 .andExpect(jsonPath("$.scheduledDate").value("2026-08-20"));
 
-        // Unknown order -> 404
+        
         mockMvc.perform(put("/api/maintenance/{id}", 999_999_999L)
                         .header("Authorization", bearer(maint.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -293,7 +293,7 @@ class CrudCompletenessIntegrationTest {
                                 """.formatted(vehicleId)))
                 .andExpect(status().isNotFound());
 
-        // Delete -> 204; vehicle returns to ACTIVE (no other open orders)
+        
         mockMvc.perform(delete("/api/maintenance/{id}", orderId)
                         .header("Authorization", bearer(maint.token())))
                 .andExpect(status().isNoContent());

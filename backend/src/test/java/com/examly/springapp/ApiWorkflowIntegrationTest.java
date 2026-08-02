@@ -24,17 +24,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Comprehensive API workflow tests against the real Spring context (H2, profile "test").
- *
- * Covers every controller endpoint mapped in the SRS with the expected status codes
- * and key JSON fields: auth, user management, vehicles, trips (full lifecycle),
- * GPS telemetry, driver scoring, geo-fences + alerts, fleet map, maintenance,
- * fuel logs and compliance documents, plus RBAC (401/403) checks.
- *
- * Each test uses unique emails/phones/registration numbers and runs in its own
- * transaction (rolled back afterwards), so tests are isolated and repeatable.
- */
+ 
+
+
+
+
+
+
+
+
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -51,10 +51,10 @@ class ApiWorkflowIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    /** Login result: JWT plus the user's identity details. */
+     
     private record AuthSession(String token, Long userId, String role, String name, String email) {}
 
-    // ------------------------------------------------------------------ helpers
+    
 
     private String suffix() {
         return String.valueOf(System.nanoTime());
@@ -131,7 +131,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isCreated());
     }
 
-    // ------------------------------------------------------------------ tests
+    
 
     @Test
     void registerValidationWorkflow() throws Exception {
@@ -139,7 +139,7 @@ class ApiWorkflowIntegrationTest {
         String email = "val" + s + "@example.com";
         String phone = uniquePhone(s);
 
-        // Invalid name -> 400 (Appendix C)
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -148,7 +148,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Name must not contain numbers or special characters"));
 
-        // Invalid phone -> 400
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -157,7 +157,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Phone Number must be exactly 10 digits long"));
 
-        // Weak password -> 400
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -166,7 +166,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Password must meet security requirements"));
 
-        // Invalid role -> 409
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -175,10 +175,10 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Invalid role: PILOT"));
 
-        // Happy path
+        
         register("Ravi Kumar", email, phone, "DRIVER");
 
-        // Duplicate email -> 409
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -187,7 +187,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("This email is already registered"));
 
-        // Duplicate phone -> 409
+        
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -196,7 +196,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("This phone number is already registered"));
 
-        // Wrong password -> 401
+        
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"identifier\":\"%s\",\"password\":\"WrongPass1!\"}".formatted(email)))
@@ -210,7 +210,7 @@ class ApiWorkflowIntegrationTest {
         register("Mgr Name", "mgr" + s + "@example.com", uniquePhone(s + "1"), "FLEET_MANAGER");
         AuthSession m = login("mgr" + s + "@example.com");
 
-        // Profile (authenticated only)
+        
         mockMvc.perform(get("/api/users/profile"))
                 .andExpect(status().isUnauthorized());
 
@@ -221,9 +221,9 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.role").value("FLEET_MANAGER"))
                 .andExpect(jsonPath("$.passwordHash").doesNotExist());
 
-        // Get by id / by email / list.
-        // NOTE: SecurityConfig requires a JWT for every non-auth route
-        // (anyRequest().authenticated()), so these return 401 without a token.
+        
+        
+        
         mockMvc.perform(get("/api/users/{id}", driverId))
                 .andExpect(status().isUnauthorized());
 
@@ -243,7 +243,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
 
-        // Update (set driver licence via PUT /api/users/{id})
+        
         mockMvc.perform(put("/api/users/{id}", driverId)
                         .header("Authorization", bearer(m.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -254,12 +254,12 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.drivingLicenceNo").value(VALID_LICENCE))
                 .andExpect(jsonPath("$.active").value(true));
 
-        // Deactivate (soft delete) -> 200
+        
         mockMvc.perform(patch("/api/users/{id}/deactivate", driverId)
                         .header("Authorization", bearer(m.token())))
                 .andExpect(status().isOk());
 
-        // Hard delete -> 204, then 404
+        
         long throwaway = register("Temp User", "tmp" + s + "@example.com", uniquePhone(s + "2"), "GUEST");
         mockMvc.perform(delete("/api/users/{id}", throwaway)
                         .header("Authorization", bearer(m.token())))
@@ -268,7 +268,7 @@ class ApiWorkflowIntegrationTest {
                         .header("Authorization", bearer(m.token())))
                 .andExpect(status().isNotFound());
 
-        // Unknown ids / emails -> 404
+        
         mockMvc.perform(get("/api/users/{id}", 999_999_999L)
                         .header("Authorization", bearer(m.token())))
                 .andExpect(status().isNotFound());
@@ -288,7 +288,7 @@ class ApiWorkflowIntegrationTest {
         String regNo = "KA01AB" + s.substring(s.length() - 4);
         String gpsId = "GPS" + s.substring(s.length() - 4);
 
-        // Create vehicle (manager) -> 201
+        
         long vehicleId = createVehicle(manager.token(), regNo, gpsId, 1000);
         mockMvc.perform(get("/api/vehicles/{id}", vehicleId)
                         .header("Authorization", bearer(manager.token())))
@@ -297,7 +297,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.status").value("ACTIVE"))
                 .andExpect(jsonPath("$.currentOdometer").value(1000));
 
-        // Duplicate registration -> 409
+        
         mockMvc.perform(post("/api/vehicles")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -306,13 +306,13 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(regNo, s.substring(s.length() - 4))))
                 .andExpect(status().isConflict());
 
-        // List all vehicles -> 200
+        
         mockMvc.perform(get("/api/vehicles")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
 
-        // Update vehicle -> 200
+        
         mockMvc.perform(put("/api/vehicles/{id}", vehicleId)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -323,16 +323,16 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.model").value("Super Ace"))
                 .andExpect(jsonPath("$.currentOdometer").value(1200));
 
-        // Assign driver -> 200
+        
         mockMvc.perform(post("/api/vehicles/{id}/assign-driver", vehicleId)
                         .header("Authorization", bearer(manager.token()))
                         .param("driverId", String.valueOf(driverId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.assignedDriver.id").value(driverId));
 
-        // Driver cannot create vehicles -> 403.
-        // NOTE: @Valid runs before @PreAuthorize, so the body must pass
-        // validation (currentOdometer >= 1) for the 403 to be the result.
+        
+        
+        
         mockMvc.perform(post("/api/vehicles")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -341,7 +341,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(s.substring(s.length() - 4), s.substring(s.length() - 4))))
                 .andExpect(status().isForbidden());
 
-        // Unauthenticated -> 401
+        
         mockMvc.perform(post("/api/vehicles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -351,7 +351,7 @@ class ApiWorkflowIntegrationTest {
         mockMvc.perform(get("/api/vehicles"))
                 .andExpect(status().isUnauthorized());
 
-        // Delete -> 204 then 404
+        
         String regNo2 = "KA02CD" + s.substring(s.length() - 4);
         long vehicle2 = createVehicle(manager.token(), regNo2, "GPSD" + s.substring(s.length() - 4), 500);
         mockMvc.perform(delete("/api/vehicles/{id}", vehicle2)
@@ -372,7 +372,7 @@ class ApiWorkflowIntegrationTest {
         AuthSession driver = login("trpdrv" + s + "@example.com");
         AuthSession maintMgr = login("trpmnt" + s + "@example.com");
 
-        // Give the driver a valid licence via the user management endpoint
+        
         mockMvc.perform(put("/api/users/{id}", driverId)
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -381,7 +381,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(VALID_LICENCE, FAR_FUTURE)))
                 .andExpect(status().isOk());
 
-        // Vehicle with all four compliance documents
+        
         long vehicleId = createVehicle(manager.token(), "KA03EF" + s.substring(s.length() - 4),
                 "GPST" + s.substring(s.length() - 4), 1000);
         addDocument(manager.token(), vehicleId, "RC", FAR_FUTURE);
@@ -393,7 +393,7 @@ class ApiWorkflowIntegrationTest {
                 {"vehicleId":%d,"driverId":%d,"origin":"Bengaluru","destination":"Mysuru","plannedStart":"2026-08-01T09:00:00","distanceKm":140}
                 """.formatted(vehicleId, driverId);
 
-        // Create trip (manager) -> 201 ASSIGNED
+        
         MvcResult tripResult = mockMvc.perform(post("/api/trips")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -406,13 +406,13 @@ class ApiWorkflowIntegrationTest {
                 .andReturn();
         long tripId = objectMapper.readTree(tripResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // Start without a fresh GPS ping -> 409
+        
         mockMvc.perform(post("/api/trips/{id}/start", tripId)
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("GPS device must be online before trip can be started"));
 
-        // Simultaneous trip on the same vehicle -> 409
+        
         mockMvc.perform(post("/api/trips")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -420,14 +420,14 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(containsString("simultaneous trip")));
 
-        // GPS ping (driver) then start -> 200 STARTED
+        
         sendPing(driver.token(), vehicleId, 12.9716, 77.5946, 45);
         mockMvc.perform(post("/api/trips/{id}/start", tripId)
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("STARTED"));
 
-        // Trip listing + active list + get by id
+        
         mockMvc.perform(get("/api/trips")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
@@ -441,7 +441,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("STARTED"));
 
-        // Complete with distance -> 200 COMPLETED, odometer increases
+        
         mockMvc.perform(post("/api/trips/{id}/complete", tripId)
                         .header("Authorization", bearer(driver.token()))
                         .param("distanceKm", "75"))
@@ -452,19 +452,19 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.currentOdometer").value(1075));
 
-        // Complete again -> 409 (already completed)
+        
         mockMvc.perform(post("/api/trips/{id}/complete", tripId)
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Only STARTED trips can be completed"));
 
-        // Cancel a completed trip -> 409
+        
         mockMvc.perform(post("/api/trips/{id}/cancel", tripId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Completed trips cannot be cancelled"));
 
-        // Second trip on the now-free vehicle, then cancel -> 200 CANCELLED
+        
         MvcResult trip2Result = mockMvc.perform(post("/api/trips")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -478,7 +478,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
 
-        // Non-compliant vehicle (no documents) -> 409
+        
         long nonCompliantVehicle = createVehicle(manager.token(), "KA04GH" + s.substring(s.length() - 4),
                 "GPSN" + s.substring(s.length() - 4), 200);
         mockMvc.perform(post("/api/trips")
@@ -490,7 +490,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(containsString("mandatory documents")));
 
-        // RBAC: DRIVER and MAINTENANCE_MANAGER cannot create trips -> 403
+        
         mockMvc.perform(post("/api/trips")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -518,9 +518,9 @@ class ApiWorkflowIntegrationTest {
                         .param("driverId", String.valueOf(driverId)))
                 .andExpect(status().isOk());
 
-        // Deterministic event sequence using explicit timestamps:
-        // 60 km/h  -> NORMAL, 90 -> SPEEDING, 30 (drop 60) -> HARSH_BRAKE,
-        // 0 (drop 30) -> HARSH_BRAKE, 0 (no drop) -> IDLE
+        
+        
+        
         String[][] pings = {
                 {"2026-07-01T10:00:00", "28.6139", "77.2090", "60"},
                 {"2026-07-01T10:00:10", "28.6139", "77.2090", "90"},
@@ -539,21 +539,21 @@ class ApiWorkflowIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
-        // History lists the pings (latest first: IDLE)
+        
         mockMvc.perform(get("/api/gps/history/{vehicleId}", vehicleId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(5)))
                 .andExpect(jsonPath("$[0].eventType").value("IDLE"));
 
-        // Live location reflects the latest ping
+        
         mockMvc.perform(get("/api/vehicles/{id}/location", vehicleId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vehicleId").value(vehicleId))
                 .andExpect(jsonPath("$.speedKmh").value(0.0));
 
-        // Driver behaviour score: 1 speeding, 2 harsh brakes, 1 idle of 5 pings
+        
         mockMvc.perform(get("/api/drivers/{id}/score", driverId)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
@@ -564,7 +564,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.idleCount").value(1))
                 .andExpect(jsonPath("$.score").value(73));
 
-        // Outlier coordinates rejected -> 400
+        
         mockMvc.perform(post("/api/gps/ping")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -573,7 +573,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(vehicleId)))
                 .andExpect(status().isBadRequest());
 
-        // Negative speed rejected -> 400
+        
         mockMvc.perform(post("/api/gps/ping")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -582,12 +582,12 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(vehicleId)))
                 .andExpect(status().isBadRequest());
 
-        // Unknown vehicle in history -> 404
+        
         mockMvc.perform(get("/api/gps/history/{vehicleId}", 999_999_999L)
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isNotFound());
 
-        // Driver cannot read history -> 403
+        
         mockMvc.perform(get("/api/gps/history/{vehicleId}", vehicleId)
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isForbidden());
@@ -604,7 +604,7 @@ class ApiWorkflowIntegrationTest {
         long vehicleId = createVehicle(manager.token(), "KA06LM" + s.substring(s.length() - 4),
                 "GPSF" + s.substring(s.length() - 4), 100);
 
-        // Create geo-fence -> 201
+        
         mockMvc.perform(post("/api/geofence")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -615,13 +615,13 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.name").value("Bengaluru Depot"))
                 .andExpect(jsonPath("$.radiusKm").value(5));
 
-        // List fences -> 200
+        
         mockMvc.perform(get("/api/geofence")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
 
-        // Ping inside (establishes state), then far outside -> GEO_EXIT + alert
+        
         sendPing(driver.token(), vehicleId, 28.6139, 77.2090, 30);
         mockMvc.perform(post("/api/gps/ping")
                         .header("Authorization", bearer(driver.token()))
@@ -632,21 +632,21 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.eventType").value("GEO_EXIT"));
 
-        // Alerts contain the EXIT event
+        
         mockMvc.perform(get("/api/geofence/alerts")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].alertType").value("EXIT"))
                 .andExpect(jsonPath("$[0].vehicle.id").value(vehicleId));
 
-        // Fleet map shows the vehicle with its latest position
+        
         mockMvc.perform(get("/api/fleet/map")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].registrationNo").value(containsString("KA06LM")))
                 .andExpect(jsonPath("$[0].latitude").value(28.9));
 
-        // Driver cannot create fences -> 403
+        
         mockMvc.perform(post("/api/geofence")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -655,7 +655,7 @@ class ApiWorkflowIntegrationTest {
                                 """))
                 .andExpect(status().isForbidden());
 
-        // Delete fence -> 204; delete again -> 404
+        
         MvcResult fenceResult = mockMvc.perform(get("/api/geofence")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
@@ -674,7 +674,7 @@ class ApiWorkflowIntegrationTest {
         String s = suffix();
         register("Maint Mgr", "mtmgr" + s + "@example.com", uniquePhone(s), "MAINTENANCE_MANAGER");
         register("Maint Driver", "mtdrv" + s + "@example.com", uniquePhone(s + "1"), "DRIVER");
-        // Vehicle creation is FLEET_MANAGER/SYSTEM_ADMINISTRATOR only (VehicleController:29)
+        
         register("Maint Fleet Mgr", "mtfm" + s + "@example.com", uniquePhone(s + "2"), "FLEET_MANAGER");
         AuthSession maint = login("mtmgr" + s + "@example.com");
         AuthSession driver = login("mtdrv" + s + "@example.com");
@@ -683,7 +683,7 @@ class ApiWorkflowIntegrationTest {
         long vehicleId = createVehicle(fleetMgr.token(), "KA07NP" + s.substring(s.length() - 4),
                 "GPSM" + s.substring(s.length() - 4), 1000);
 
-        // Create maintenance order -> 201 SCHEDULED; vehicle enters MAINTENANCE
+        
         MvcResult orderResult = mockMvc.perform(post("/api/maintenance")
                         .header("Authorization", bearer(maint.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -702,11 +702,11 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("MAINTENANCE"));
 
-        // Second order while the first is open -> 201 in the current implementation.
-        // DEVIATION: SRS Appendix F expects 409 for overlapping open orders, but the
-        // guard (MaintenanceService:39-42) only rejects orders with status IN_PROGRESS,
-        // and no controller endpoint ever sets IN_PROGRESS (createOrder always sets
-        // SCHEDULED, completeOrder sets COMPLETED) - the guard is unreachable.
+        
+        
+        
+        
+        
         MvcResult secondResult = mockMvc.perform(post("/api/maintenance")
                         .header("Authorization", bearer(maint.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -718,7 +718,7 @@ class ApiWorkflowIntegrationTest {
                 .andReturn();
         long order2Id = objectMapper.readTree(secondResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // Get by id / list / by vehicle
+        
         mockMvc.perform(get("/api/maintenance/{id}", orderId)
                         .header("Authorization", bearer(maint.token())))
                 .andExpect(status().isOk())
@@ -732,8 +732,8 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        // Complete order 1 -> COMPLETED. Vehicle stays MAINTENANCE because order 2
-        // is still open (MaintenanceService:65-71 only reactivates when no open order).
+        
+        
         mockMvc.perform(post("/api/maintenance/{id}/complete", orderId)
                         .header("Authorization", bearer(maint.token()))
                         .param("cost", "2500"))
@@ -745,7 +745,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("MAINTENANCE"));
 
-        // Complete order 2 -> COMPLETED; no open orders left -> vehicle ACTIVE
+        
         mockMvc.perform(post("/api/maintenance/{id}/complete", order2Id)
                         .header("Authorization", bearer(maint.token())))
                 .andExpect(status().isOk())
@@ -755,18 +755,18 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("ACTIVE"));
 
-        // Re-complete the same order: returns 200 (SRS Appendix F expects 404;
-        // the service lacks a completed-status guard - reported as deviation)
+        
+        
         mockMvc.perform(post("/api/maintenance/{id}/complete", orderId)
                         .header("Authorization", bearer(maint.token())))
                 .andExpect(status().isOk());
 
-        // Unknown order -> 404
+        
         mockMvc.perform(get("/api/maintenance/{id}", 999_999_999L)
                         .header("Authorization", bearer(maint.token())))
                 .andExpect(status().isNotFound());
 
-        // ODOMETER trigger creates a scheduled order for a vehicle past the interval
+        
         long highOdo = createVehicle(fleetMgr.token(), "KA08QR" + s.substring(s.length() - 4),
                 "GPSO" + s.substring(s.length() - 4), 20_000);
         mockMvc.perform(post("/api/maintenance/triggers/odometer")
@@ -778,7 +778,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].trigger").value("ODOMETER"));
 
-        // Driver cannot create maintenance orders -> 403
+        
         mockMvc.perform(post("/api/maintenance")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -793,7 +793,7 @@ class ApiWorkflowIntegrationTest {
         String s = suffix();
         long driverId = register("Fuel Driver", "fudrv" + s + "@example.com", uniquePhone(s), "DRIVER");
         register("Fuel Fin", "fufin" + s + "@example.com", uniquePhone(s + "1"), "FINANCE_OFFICER");
-        // Vehicle creation is FLEET_MANAGER/SYSTEM_ADMINISTRATOR only (VehicleController:29)
+        
         register("Fuel Fleet Mgr", "fufm" + s + "@example.com", uniquePhone(s + "2"), "FLEET_MANAGER");
         AuthSession driver = login("fudrv" + s + "@example.com");
         AuthSession finance = login("fufin" + s + "@example.com");
@@ -802,7 +802,7 @@ class ApiWorkflowIntegrationTest {
         long vehicleId = createVehicle(fleetMgr.token(), "KA09ST" + s.substring(s.length() - 4),
                 "GPSU" + s.substring(s.length() - 4), 300);
 
-        // Driver logs fuel -> 201
+        
         mockMvc.perform(post("/api/fuel/log")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -813,7 +813,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$.quantityLitres").value(40))
                 .andExpect(jsonPath("$.cost").value(4000));
 
-        // Finance officer logs another -> 201
+        
         mockMvc.perform(post("/api/fuel/log")
                         .header("Authorization", bearer(finance.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -822,7 +822,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(vehicleId, driverId)))
                 .andExpect(status().isCreated());
 
-        // All logs / by vehicle / by driver
+        
         mockMvc.perform(get("/api/fuel/log")
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isOk())
@@ -836,7 +836,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        // Total cost = 4000 + 5500 = 9500
+        
         MvcResult costResult = mockMvc.perform(get("/api/fuel/log/cost")
                         .header("Authorization", bearer(finance.token())))
                 .andExpect(status().isOk())
@@ -844,14 +844,14 @@ class ApiWorkflowIntegrationTest {
         BigDecimal total = objectMapper.readTree(costResult.getResponse().getContentAsString()).decimalValue();
         assert total.compareTo(new BigDecimal("9500")) == 0 : "Expected total fuel cost 9500 but was " + total;
 
-        // Date range filter still returns the same total
+        
         mockMvc.perform(get("/api/fuel/log/cost")
                         .header("Authorization", bearer(finance.token()))
                         .param("from", "2026-07-01")
                         .param("to", "2026-07-31"))
                 .andExpect(status().isOk());
 
-        // Driver cannot list fuel logs -> 403; unauthenticated -> 401
+        
         mockMvc.perform(get("/api/fuel/log")
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isForbidden());
@@ -870,11 +870,11 @@ class ApiWorkflowIntegrationTest {
         long vehicleId = createVehicle(manager.token(), "KA10UV" + s.substring(s.length() - 4),
                 "GPSD2" + s.substring(s.length() - 4), 500);
 
-        // Add valid documents -> 201 with VALID status
+        
         addDocument(manager.token(), vehicleId, "RC", FAR_FUTURE);
         addDocument(manager.token(), vehicleId, "INSURANCE", FAR_FUTURE);
 
-        // Add a document expiring in 10 days -> EXPIRING_SOON
+        
         MvcResult soonResult = mockMvc.perform(post("/api/documents")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -887,7 +887,7 @@ class ApiWorkflowIntegrationTest {
                 .andReturn();
         long docId = objectMapper.readTree(soonResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // List / by vehicle
+        
         mockMvc.perform(get("/api/documents")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
@@ -897,7 +897,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
 
-        // Expiry alerts: windows 60, 30 and 7 days exist; PUC (10 days) is in all
+        
         mockMvc.perform(get("/api/documents/expiry")
                         .header("Authorization", bearer(manager.token())))
                 .andExpect(status().isOk())
@@ -905,9 +905,9 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(jsonPath("$['30']").isArray())
                 .andExpect(jsonPath("$['7']").isArray());
 
-        // Refresh recomputes statuses -> 200.
-        // NOTE: DocumentController:52 allows LOGISTICS_COORDINATOR/FLEET_MANAGER/
-        // SYSTEM_ADMINISTRATOR (MAINTENANCE_MANAGER is NOT on the refresh list).
+        
+        
+        
         mockMvc.perform(post("/api/documents/refresh")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -918,7 +918,7 @@ class ApiWorkflowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[?(@.id == %d)].status".formatted(docId), org.hamcrest.Matchers.contains("EXPIRING_SOON")));
 
-        // Unknown vehicle document -> 404
+        
         mockMvc.perform(post("/api/documents")
                         .header("Authorization", bearer(manager.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -927,7 +927,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(FAR_FUTURE)))
                 .andExpect(status().isNotFound());
 
-        // Driver cannot add documents -> 403
+        
         mockMvc.perform(post("/api/documents")
                         .header("Authorization", bearer(driver.token()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -936,7 +936,7 @@ class ApiWorkflowIntegrationTest {
                                 """.formatted(vehicleId, FAR_FUTURE)))
                 .andExpect(status().isForbidden());
 
-        // Driver cannot refresh statuses -> 403
+        
         mockMvc.perform(post("/api/documents/refresh")
                         .header("Authorization", bearer(driver.token())))
                 .andExpect(status().isForbidden());
@@ -952,7 +952,7 @@ class ApiWorkflowIntegrationTest {
                         .header("Authorization", bearer(session.token())))
                 .andExpect(status().isOk());
 
-        // The logged-out token must no longer authenticate (SRS FR2 blacklisting)
+        
         mockMvc.perform(get("/api/users/profile")
                         .header("Authorization", bearer(session.token())))
                 .andExpect(status().isUnauthorized());

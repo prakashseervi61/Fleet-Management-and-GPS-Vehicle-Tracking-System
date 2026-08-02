@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
 
-/**
- * Geo-fence zone entity for entry/exit alerting.
- */
+ 
+
+
 @Entity
 @Getter
 @Setter

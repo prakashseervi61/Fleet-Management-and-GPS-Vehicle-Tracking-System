@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Request DTO for vehicle registration (SRS FR4).
- */
+ 
+
+
 @Getter
 @Setter
 @NoArgsConstructor

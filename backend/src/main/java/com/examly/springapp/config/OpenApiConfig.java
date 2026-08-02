@@ -9,9 +9,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * OpenAPI 3.0 documentation configuration (SRS 3.6.4 Swagger/OpenAPI with examples for every endpoint).
- */
+ 
+
+
 @Configuration
 public class OpenApiConfig {
 

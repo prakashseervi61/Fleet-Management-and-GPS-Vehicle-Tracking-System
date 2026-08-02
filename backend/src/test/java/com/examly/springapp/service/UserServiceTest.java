@@ -24,9 +24,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * UserService applies Appendix C validation and encodes passwords.
- */
+ 
+
+
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 

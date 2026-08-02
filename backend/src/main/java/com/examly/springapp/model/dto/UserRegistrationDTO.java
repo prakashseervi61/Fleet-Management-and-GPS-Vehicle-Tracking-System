@@ -8,11 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Data Transfer Object for User registration.
- * Used to separate internal representation from external API representation.
- * Validation follows Appendix C of SRS.
- */
+ 
+
+
+
+
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Appendix C validation rules: Name = alphabetic + spaces, 2-100 chars;
- * Phone = exactly 10 digits.
- */
+ 
+
+
+
 class FleetValidatorTest {
 
     private final FleetValidator validator = new FleetValidator();

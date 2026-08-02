@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Authentication endpoints: register, login, logout (SRS FR1/FR2, Appendix H).
- */
+ 
+
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -22,11 +22,11 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    /**
-     * Register a new user with Appendix C validation.
-     * @param dto registration payload
-     * @return 201 with success message
-     */
+     
+
+
+
+
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody UserRegistrationDTO dto) {
         User user = authService.register(dto);
@@ -34,21 +34,21 @@ public class AuthController {
                 .body(new MessageResponse("User registered successfully with id: " + user.getId()));
     }
 
-    /**
-     * Multi-credential login (user id, email or mobile).
-     * @param request login payload
-     * @return JWT auth response
-     */
+     
+
+
+
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    /**
-     * Logout: blacklists the presented token.
-     * @param authHeader Authorization header
-     * @return success message
-     */
+     
+
+
+
+
     @PostMapping("/logout")
     public ResponseEntity<MessageResponse> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         String token = null;

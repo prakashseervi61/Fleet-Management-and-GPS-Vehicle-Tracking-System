@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
-/**
- * Registration, login and logout flows (SRS FR1/FR2, Appendix D).
- */
+ 
+
+
 @Service
 public class AuthService {
 
@@ -44,11 +44,11 @@ public class AuthService {
     @Autowired
     private FleetValidator fleetValidator;
 
-    /**
-     * Register a new user with Appendix C validation and password policy checks.
-     * @param dto registration payload
-     * @return the created user
-     */
+     
+
+
+
+
     public User register(UserRegistrationDTO dto) {
         fleetValidator.validateName(dto.getName());
         fleetValidator.validatePhone(dto.getPhoneNumber());
@@ -70,11 +70,11 @@ public class AuthService {
         return userService.createUser(user);
     }
 
-    /**
-     * Multi-credential login by user id, email, or mobile (SRS FR2).
-     * @param request login payload
-     * @return JWT auth response with role-specific expiry
-     */
+     
+
+
+
+
     public AuthResponse login(LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -93,10 +93,10 @@ public class AuthService {
         }
     }
 
-    /**
-     * Blacklist the presented token on logout (SRS FR2 token blacklisting).
-     * @param token the raw JWT string
-     */
+     
+
+
+
     public void logout(String token) {
         if (token == null || token.isBlank()) {
             return;

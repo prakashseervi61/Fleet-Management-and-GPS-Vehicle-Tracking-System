@@ -7,9 +7,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Response DTO for trip records.
- */
+ 
+
+
 @Getter
 @Setter
 public class TripResponse {

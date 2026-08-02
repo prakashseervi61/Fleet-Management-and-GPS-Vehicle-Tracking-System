@@ -27,9 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-/**
- * Vehicle registration with duplicate detection and location retrieval.
- */
+ 
+
+
 @ExtendWith(MockitoExtension.class)
 class VehicleServiceTest {
 

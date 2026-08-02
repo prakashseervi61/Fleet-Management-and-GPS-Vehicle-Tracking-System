@@ -31,10 +31,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-/**
- * Trip assignment enforcing Appendix F rules: DRIVER role, valid licence,
- * no simultaneous trips, no IN_PROGRESS maintenance, compliant documents.
- */
+ 
+
+
+
 @ExtendWith(MockitoExtension.class)
 class TripServiceTest {
 

@@ -12,9 +12,9 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Returns a 401 JSON response for unauthenticated requests (SRS Appendix H auth guard).
- */
+ 
+
+
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
