@@ -1,0 +1,28 @@
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# GitHub workflows (keep repo clean)
+.github/
+
+# Eclipse
+.settings/
+**/.settings/
+.classpath
+.project
+.factorypath
+
+# SRS documentation (do not push)
+SRS.txt
+*.pdf
+SRS_*.docx
+
+# Build output
+backend/target/
+target/
+*.class
+
+# Logs
+*.log
+boot.log
