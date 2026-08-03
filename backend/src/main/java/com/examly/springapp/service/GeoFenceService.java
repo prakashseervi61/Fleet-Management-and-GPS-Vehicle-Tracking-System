@@ -61,8 +61,11 @@ public class GeoFenceService {
         return geoFenceRepository.save(fence);
     }
 
+    @Transactional
     public void deleteGeoFence(Long id) {
-        geoFenceRepository.delete(getGeoFence(id));
+        GeoFence fence = getGeoFence(id);
+        geoFenceAlertRepository.deleteByGeofenceId(id);
+        geoFenceRepository.delete(fence);
     }
 
      

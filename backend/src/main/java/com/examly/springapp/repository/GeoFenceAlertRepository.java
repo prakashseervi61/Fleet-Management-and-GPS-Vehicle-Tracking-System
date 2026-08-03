@@ -20,4 +20,6 @@ public interface GeoFenceAlertRepository extends JpaRepository<GeoFenceAlert, Lo
     List<GeoFenceAlert> findByVehicleId(Long vehicleId);
 
     List<GeoFenceAlert> findByGeofenceId(Long geofenceId);
+
+    void deleteByGeofenceId(Long geofenceId);
 }

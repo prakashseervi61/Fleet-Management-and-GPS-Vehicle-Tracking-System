@@ -16,10 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
- 
-
-
-
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
@@ -47,7 +43,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception ignored) {
-                
             }
         }
         filterChain.doFilter(request, response);
