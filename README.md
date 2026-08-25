@@ -1,4 +1,4 @@
-﻿# 🚛 Fleet Management & GPS Vehicle Tracking System
+# 🚛 Fleet Management & GPS Vehicle Tracking System
 
 A full-stack, enterprise-grade **Fleet Management and Real-Time GPS Tracking System** designed to streamline fleet logistics, vehicle maintenance, telemetry monitoring, document compliance, and driver safety scoring.
 
@@ -7,7 +7,6 @@ A full-stack, enterprise-grade **Fleet Management and Real-Time GPS Tracking Sys
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
@@ -200,9 +199,3 @@ AD_-Project/
 │
 └── README.md
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
