@@ -1,3 +1,4 @@
+import { isValidElement } from 'react'
 import { Loader2 } from 'lucide-react'
 import { cn } from '../../utils/cn'
 
@@ -40,10 +41,10 @@ export default function Button({
     >
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
-      ) : typeof Icon === 'function' ? (
-        <Icon className="h-4 w-4" />
-      ) : (
+      ) : Icon == null ? null : isValidElement(Icon) ? (
         Icon
+      ) : (
+        <Icon className="h-4 w-4" />
       )}
       {children}
     </button>
