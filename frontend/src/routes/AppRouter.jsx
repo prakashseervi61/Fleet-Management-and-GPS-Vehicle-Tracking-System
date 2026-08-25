@@ -21,8 +21,8 @@ import DocumentsPage from '../pages/documents/DocumentsPage'
 import DriversPage from '../pages/drivers/DriversPage'
 import DriverScorePage from '../pages/drivers/DriverScorePage'
 import UsersPage from '../pages/system/UsersPage'
-import ProfilePage from '../pages/system/ProfilePage'
-import SettingsPage from '../pages/system/SettingsPage'
+import ProfilePage from '../pages/profile/ProfilePage'
+import SettingsPage from '../pages/settings/SettingsPage'
 import NotFoundPage from '../pages/system/NotFoundPage'
 
 const ALL_ROLES = Object.values(ROLES)
