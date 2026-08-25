@@ -118,10 +118,6 @@ export default function LoginPage() {
           Create account
         </Link>
       </p>
-
-      <p className="mt-10 text-center text-xs text-slate-400">
-        Protected by role-based access control &middot; FleetTrack SIH 2026
-      </p>
     </div>
   )
 }

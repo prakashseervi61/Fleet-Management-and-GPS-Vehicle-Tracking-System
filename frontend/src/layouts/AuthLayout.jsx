@@ -35,10 +35,6 @@ export default function AuthLayout() {
             ))}
           </ul>
         </div>
-
-        <p className="relative z-10 text-xs text-slate-500">
-          &copy; 2026 FleetTrack &middot; Smart India Hackathon
-        </p>
       </div>
 
       <div className="flex items-center justify-center bg-slate-50 p-6">
