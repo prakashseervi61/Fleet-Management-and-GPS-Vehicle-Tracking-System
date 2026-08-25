@@ -572,7 +572,7 @@ export default function DashboardPage() {
           Dashboard
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Good {daypart}, {user.name.split(' ')[0]} — here's your fleet at a
+          Good {daypart}, {user?.name ? user.name.split(' ')[0] : 'User'} — here's your fleet at a
           glance.
         </p>
       </div>

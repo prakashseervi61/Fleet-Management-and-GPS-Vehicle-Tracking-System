@@ -19,7 +19,7 @@ import { FLEET_REFRESH_INTERVAL_MS } from '../../constants/businessRules'
 
 const PAGE_SIZE = 10
 
-const MAINTENANCE_STATUSES = ['OPEN', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']
+const MAINTENANCE_STATUSES = ['SCHEDULED', 'IN_PROGRESS', 'COMPLETED']
 
 const MAINTENANCE_SERVICE_TYPES = [
   'OIL_CHANGE',
@@ -62,6 +62,7 @@ export default function MaintenancePage() {
   const [page, setPage] = useState(1)
 
   const [formOpen, setFormOpen] = useState(false)
+  const [viewTarget, setViewTarget] = useState(null)
   const [editOrder, setEditOrder] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
@@ -289,7 +290,7 @@ export default function MaintenancePage() {
                           size="sm"
                           icon={Eye}
                           aria-label={`View order ${o.id}`}
-                          onClick={() => navigate(`/maintenance/${o.id}`)}
+                          onClick={() => setViewTarget(o)}
                         />
                         <Button
                           variant="ghost"
@@ -298,7 +299,7 @@ export default function MaintenancePage() {
                           aria-label={`Edit order ${o.id}`}
                           onClick={() => openEdit(o)}
                         />
-                        {o.status === 'OPEN' && (
+                        {o.status !== 'COMPLETED' && (
                           <Button
                             variant="ghost"
                             size="sm"
@@ -333,6 +334,62 @@ export default function MaintenancePage() {
         maintenanceOrder={editOrder}
         onCreated={handleSaved}
       />
+
+      {/* View Maintenance Order Modal */}
+      <Modal
+        open={Boolean(viewTarget)}
+        onClose={() => setViewTarget(null)}
+        title="Maintenance Order Details"
+        size="md"
+        footer={
+          <Button variant="secondary" onClick={() => setViewTarget(null)}>
+            Close
+          </Button>
+        }
+      >
+        {viewTarget && (
+          <div className="space-y-4 text-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span className="font-semibold text-base text-slate-800">
+                {humanize(viewTarget.serviceType)}
+              </span>
+              <StatusBadge status={viewTarget.status} />
+            </div>
+            <dl className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt className="text-slate-500 text-xs">Vehicle</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.vehicle?.registrationNo || '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Make & Model</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.vehicle ? `${viewTarget.vehicle.make} ${viewTarget.vehicle.model}` : '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Trigger</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {humanize(viewTarget.trigger)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Scheduled Date</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {formatDate(viewTarget.scheduledDate)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Cost</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.cost != null ? formatCurrency(viewTarget.cost) : '—'}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
+      </Modal>
 
       <Modal
         open={Boolean(deleteTarget)}

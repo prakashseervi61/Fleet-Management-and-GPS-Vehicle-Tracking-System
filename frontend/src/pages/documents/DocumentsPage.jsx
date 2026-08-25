@@ -27,14 +27,13 @@ const DOCUMENT_TYPES = [
   { value: '', label: 'All types' },
   { value: 'RC', label: 'RC' },
   { value: 'INSURANCE', label: 'Insurance' },
-  { value: 'PERMIT', label: 'Permit' },
-  { value: 'PUCC', label: 'PUCC' },
-  { value: 'DRIVING_LICENCE', label: 'Driving Licence' },
+  { value: 'PUC', label: 'PUC' },
+  { value: 'FITNESS', label: 'Fitness' },
 ]
 
 const DOCUMENT_STATUSES = [
   { value: '', label: 'All statuses' },
-  { value: 'ACTIVE', label: 'Active' },
+  { value: 'VALID', label: 'Valid' },
   { value: 'EXPIRING_SOON', label: 'Expiring Soon' },
   { value: 'EXPIRED', label: 'Expired' },
 ]

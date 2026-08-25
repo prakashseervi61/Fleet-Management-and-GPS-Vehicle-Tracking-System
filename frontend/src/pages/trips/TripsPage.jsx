@@ -24,8 +24,8 @@ const PAGE_SIZE = 10
 
 const TRIP_STATUSES = [
   { value: '', label: 'All statuses' },
-  { value: 'PLANNED', label: 'Planned' },
-  { value: 'IN_PROGRESS', label: 'In progress' },
+  { value: 'ASSIGNED', label: 'Assigned' },
+  { value: 'STARTED', label: 'Started' },
   { value: 'COMPLETED', label: 'Completed' },
   { value: 'CANCELLED', label: 'Cancelled' },
 ]
@@ -48,6 +48,7 @@ export default function TripsPage() {
   const [page, setPage] = useState(1)
 
   const [showCreate, setShowCreate] = useState(false)
+  const [viewTarget, setViewTarget] = useState(null)
   const [completeTarget, setCompleteTarget] = useState(null)
   const [distanceKm, setDistanceKm] = useState('')
   const [confirming, setConfirming] = useState(false)
@@ -82,7 +83,11 @@ export default function TripsPage() {
       result = result.filter(
         (t) =>
           t.origin?.toLowerCase().includes(q) ||
-          t.destination?.toLowerCase().includes(q)
+          t.destination?.toLowerCase().includes(q) ||
+          t.vehicle?.registrationNo?.toLowerCase().includes(q) ||
+          t.registrationNo?.toLowerCase().includes(q) ||
+          t.driver?.name?.toLowerCase().includes(q) ||
+          t.driverName?.toLowerCase().includes(q)
       )
     }
     if (statusFilter) {
@@ -100,23 +105,28 @@ export default function TripsPage() {
   }, [search, statusFilter])
 
   function canStart(trip) {
-    if (trip.status !== 'PLANNED') return false
+    if (trip.status !== 'ASSIGNED' && trip.status !== 'PLANNED') return false
+    const driverId = trip.driver?.id || trip.driverId
     if (user?.role === ROLES.DRIVER) {
-      return hasRole(...CAN_START_COMPLETE) && trip.driverId === user.id
+      return hasRole(...CAN_START_COMPLETE) && driverId === user.id
     }
     return hasRole(...CAN_START_COMPLETE)
   }
 
   function canComplete(trip) {
-    if (trip.status !== 'IN_PROGRESS') return false
+    if (trip.status !== 'STARTED' && trip.status !== 'IN_PROGRESS') return false
+    const driverId = trip.driver?.id || trip.driverId
     if (user?.role === ROLES.DRIVER) {
-      return hasRole(...CAN_START_COMPLETE) && trip.driverId === user.id
+      return hasRole(...CAN_START_COMPLETE) && driverId === user.id
     }
     return hasRole(...CAN_START_COMPLETE)
   }
 
   function canCancel(trip) {
-    return (trip.status === 'PLANNED' || trip.status === 'IN_PROGRESS') && hasRole(...CAN_CANCEL)
+    return (
+      ['ASSIGNED', 'PLANNED', 'STARTED', 'IN_PROGRESS'].includes(trip.status) &&
+      hasRole(...CAN_CANCEL)
+    )
   }
 
   async function handleStart(trip) {
@@ -131,7 +141,7 @@ export default function TripsPage() {
 
   function openComplete(trip) {
     setCompleteTarget(trip)
-    setDistanceKm('')
+    setDistanceKm(trip.distanceKm || '')
   }
 
   async function confirmComplete() {
@@ -259,10 +269,10 @@ export default function TripsPage() {
                 {paginated.map((t) => (
                   <TR key={t.id}>
                     <TD>
-                      <span className="text-sm text-slate-700">{t.origin}</span>
+                      <span className="text-sm text-slate-700 font-medium">{t.origin}</span>
                     </TD>
                     <TD>
-                      <span className="text-sm text-slate-700">{t.destination}</span>
+                      <span className="text-sm text-slate-700 font-medium">{t.destination}</span>
                     </TD>
                     <TD>
                       <span className="font-semibold text-slate-800">
@@ -275,8 +285,8 @@ export default function TripsPage() {
                       )}
                     </TD>
                     <TD>
-                      <span className={t.driverName ? 'text-slate-700' : 'text-slate-400'}>
-                        {t.driverName || '—'}
+                      <span className={t.driver?.name || t.driverName ? 'text-slate-700' : 'text-slate-400'}>
+                        {t.driver?.name || t.driverName || '—'}
                       </span>
                     </TD>
                     <TD>{formatDateTime(t.plannedStart)}</TD>
@@ -288,7 +298,7 @@ export default function TripsPage() {
                           size="sm"
                           icon={Eye}
                           aria-label={`View trip ${t.id}`}
-                          onClick={() => navigate(`/trips/${t.id}`)}
+                          onClick={() => setViewTarget(t)}
                         />
                         {canStart(t) && (
                           <Button
@@ -334,6 +344,62 @@ export default function TripsPage() {
         onClose={() => setShowCreate(false)}
         onCreated={fetchData}
       />
+
+      {/* Trip Details Modal */}
+      <Modal
+        open={Boolean(viewTarget)}
+        onClose={() => setViewTarget(null)}
+        title="Trip Details"
+        size="md"
+        footer={
+          <Button variant="secondary" onClick={() => setViewTarget(null)}>
+            Close
+          </Button>
+        }
+      >
+        {viewTarget && (
+          <div className="space-y-4 text-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span className="font-semibold text-base text-slate-800">
+                {viewTarget.origin} → {viewTarget.destination}
+              </span>
+              <StatusBadge status={viewTarget.status} />
+            </div>
+            <dl className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt className="text-slate-500 text-xs">Vehicle</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.vehicle?.registrationNo || viewTarget.registrationNo || '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Driver</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.driver?.name || viewTarget.driverName || '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Planned Start</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {formatDateTime(viewTarget.plannedStart)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Actual End</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.actualEnd ? formatDateTime(viewTarget.actualEnd) : 'In progress / Pending'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 text-xs">Distance</dt>
+                <dd className="font-medium text-slate-800 mt-0.5">
+                  {viewTarget.distanceKm ? `${viewTarget.distanceKm} km` : '—'}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
+      </Modal>
 
       <Modal
         open={Boolean(completeTarget)}

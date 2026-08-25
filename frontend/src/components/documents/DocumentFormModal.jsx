@@ -7,11 +7,10 @@ import { useNotifications } from '../../context/NotificationContext'
 import { uploadDocument, updateDocument, getVehicles } from '../../api'
 
 const DOCUMENT_TYPES = [
-  { value: 'RC', label: 'RC' },
+  { value: 'RC', label: 'Registration Certificate (RC)' },
   { value: 'INSURANCE', label: 'Insurance' },
-  { value: 'PERMIT', label: 'Permit' },
-  { value: 'PUCC', label: 'PUCC' },
-  { value: 'DRIVING_LICENCE', label: 'Driving Licence' },
+  { value: 'PUC', label: 'Pollution Certificate (PUC)' },
+  { value: 'FITNESS', label: 'Fitness Certificate' },
 ]
 
 function buildInitial(doc) {

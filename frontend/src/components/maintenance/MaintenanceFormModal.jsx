@@ -15,7 +15,7 @@ const MAINTENANCE_SERVICE_TYPES = [
   'GENERAL_SERVICE',
 ]
 
-const MAINTENANCE_TRIGGERS = ['SCHEDULED', 'ODOMETER', 'BREAKDOWN', 'INSPECTION']
+const MAINTENANCE_TRIGGERS = ['SCHEDULE', 'ODOMETER', 'OBD']
 
 function humanize(str) {
   if (!str) return '—'

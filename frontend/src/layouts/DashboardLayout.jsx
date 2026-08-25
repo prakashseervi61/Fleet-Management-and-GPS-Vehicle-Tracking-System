@@ -8,12 +8,12 @@ export default function DashboardLayout() {
   const { sidebarCollapsed } = useUI()
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100 overflow-x-hidden">
       <Sidebar />
       <Sidebar mobile />
 
       <div
-        className={`transition-[padding] duration-200 ${
+        className={`min-w-0 transition-[padding] duration-200 ${
           sidebarCollapsed ? 'lg:pl-[76px]' : 'lg:pl-72'
         }`}
       >

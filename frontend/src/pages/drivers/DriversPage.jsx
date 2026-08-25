@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { Users, CloudOff } from 'lucide-react'
 import { getDriverScore, getUsers } from '../../api'
 import { formatRelativeTime } from '../../utils/format'
@@ -22,48 +23,71 @@ function scoreLabel(score) {
   return 'Poor'
 }
 
-function DriverCard({ score }) {
+function DriverCard({ driver, score }) {
   const data = score
-  if (!data) {
-    return (
-      <Card className="p-5">
-        <div className="text-sm text-slate-400 italic">Score unavailable</div>
-      </Card>
-    )
-  }
   return (
-    <Card className="p-5 space-y-4">
+    <Card className="p-5 space-y-4 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-slate-800">{data.driverName}</h3>
-        <span className={`text-white rounded-full px-3 py-1 text-sm font-bold ${scoreBadgeColor(data.score)}`}>
-          {data.score} — {scoreLabel(data.score)}
-        </span>
+        <div>
+          <h3 className="text-lg font-bold text-slate-800">{driver.name}</h3>
+          <p className="text-xs text-slate-400 font-mono mt-0.5">
+            {driver.drivingLicenceNo ? `Licence: ${driver.drivingLicenceNo}` : driver.email}
+          </p>
+        </div>
+        {data ? (
+          <span className={`text-white rounded-full px-3 py-1 text-sm font-bold ${scoreBadgeColor(data.score)}`}>
+            {data.score}
+          </span>
+        ) : (
+          <span className="text-xs text-slate-400 bg-slate-100 rounded-full px-2.5 py-1">
+            Loading...
+          </span>
+        )}
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <span className="text-xl font-bold text-slate-800">{data.totalPings}</span>
-          <span className="block text-xs text-slate-500">Total pings</span>
+
+      {data ? (
+        <>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="text-xl font-bold text-slate-800">{data.totalPings}</span>
+              <span className="block text-xs text-slate-500">Total pings</span>
+            </div>
+            <div>
+              <span className={`text-xl font-bold ${data.speedingCount > 0 ? 'text-danger-600' : 'text-slate-800'}`}>
+                {data.speedingCount}
+              </span>
+              <span className="block text-xs text-slate-500">Speeding</span>
+            </div>
+            <div>
+              <span className={`text-xl font-bold ${data.harshBrakeCount > 0 ? 'text-warning-600' : 'text-slate-800'}`}>
+                {data.harshBrakeCount}
+              </span>
+              <span className="block text-xs text-slate-500">Harsh braking</span>
+            </div>
+            <div>
+              <span className={`text-xl font-bold ${data.idleCount > 0 ? 'text-warning-600' : 'text-slate-800'}`}>
+                {data.idleCount}
+              </span>
+              <span className="block text-xs text-slate-500">Idle</span>
+            </div>
+          </div>
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-xs text-slate-400">
+              {scoreLabel(data.score)} &middot; {formatRelativeTime(data.evaluatedAt)}
+            </span>
+            <Link
+              to={`/drivers/${driver.id}/score`}
+              className="text-xs font-semibold text-brand-600 hover:text-brand-700 hover:underline"
+            >
+              Full report →
+            </Link>
+          </div>
+        </>
+      ) : (
+        <div className="py-4 text-center text-xs text-slate-400">
+          Calculating score metrics...
         </div>
-        <div>
-          <span className={`text-xl font-bold ${data.speedingCount > 0 ? 'text-danger-600' : 'text-slate-800'}`}>
-            {data.speedingCount}
-          </span>
-          <span className="block text-xs text-slate-500">Speeding</span>
-        </div>
-        <div>
-          <span className={`text-xl font-bold ${data.harshBrakeCount > 0 ? 'text-warning-600' : 'text-slate-800'}`}>
-            {data.harshBrakeCount}
-          </span>
-          <span className="block text-xs text-slate-500">Harsh braking</span>
-        </div>
-        <div>
-          <span className={`text-xl font-bold ${data.idleCount > 0 ? 'text-warning-600' : 'text-slate-800'}`}>
-            {data.idleCount}
-          </span>
-          <span className="block text-xs text-slate-500">Idle</span>
-        </div>
-      </div>
-      <div className="text-xs text-slate-400">Last evaluated: {formatRelativeTime(data.evaluatedAt)}</div>
+      )}
     </Card>
   )
 }
@@ -163,7 +187,7 @@ export default function DriversPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {drivers.map((d) => (
-            <DriverCard key={d.id} score={scores[d.id]} />
+            <DriverCard key={d.id} driver={d} score={scores[d.id]} />
           ))}
         </div>
       )}
