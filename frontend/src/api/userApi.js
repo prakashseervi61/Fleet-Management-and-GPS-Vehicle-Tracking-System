@@ -23,7 +23,3 @@ export function updateUser(id, payload) {
 export function deleteUser(id) {
   return axiosClient.delete(`/users/${id}`).then((res) => res.data)
 }
-
-export function deactivateUser(id) {
-  return axiosClient.patch(`/users/${id}/deactivate`).then((res) => res.data)
-}
