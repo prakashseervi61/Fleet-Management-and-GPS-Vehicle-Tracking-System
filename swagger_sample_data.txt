@@ -1,0 +1,142 @@
+================================================================================
+FLEET MANAGEMENT SYSTEM - SAMPLE DATA FOR SWAGGER-UI (CIA-1)
+================================================================================
+Backend:  http://localhost:8080/swagger-ui/index.html
+
+
+================================================================================
+1. USERS  -  POST /api/auth/register     (7 calls, one per user)
+================================================================================
+// id 1 - System Administrator
+{"name":"Admin User","email":"admin@fleet.com","phoneNumber":"9000000001","password":"Password@123","role":"SYSTEM_ADMINISTRATOR"}
+
+// id 2 - Fleet Manager (use this login for the token)
+{"name":"Arun Menon","email":"fm@fleet.com","phoneNumber":"9000000002","password":"Password@123","role":"FLEET_MANAGER"}
+
+// id 3 - Logistics Coordinator
+{"name":"Priya Nair","email":"logistics@fleet.com","phoneNumber":"9000000003","password":"Password@123","role":"LOGISTICS_COORDINATOR"}
+
+// id 4 - Maintenance Manager
+{"name":"Ramesh Iyer","email":"maintenance@fleet.com","phoneNumber":"9000000004","password":"Password@123","role":"MAINTENANCE_MANAGER"}
+
+// id 5 - Finance Officer
+{"name":"Sunita Rao","email":"finance@fleet.com","phoneNumber":"9000000005","password":"Password@123","role":"FINANCE_OFFICER"}
+
+// id 6 - Driver (Ravi Kumar)
+{"name":"Ravi Kumar","email":"ravi.driver@fleet.com","phoneNumber":"9000000006","password":"Password@123","role":"DRIVER"}
+
+// id 7 - Driver (Suresh Patil)
+{"name":"Suresh Patil","email":"suresh.driver@fleet.com","phoneNumber":"9000000007","password":"Password@123","role":"DRIVER"}
+
+
+================================================================================
+2. VEHICLES  -  POST /api/vehicles        (5 calls, ids 1-5)
+================================================================================
+// id 1 - assigned to driver 6
+{"registrationNo":"KA01AB1234","make":"Tata","model":"Ace","gpsDeviceId":"GPS-DEV-001","status":"ACTIVE","currentOdometer":42300,"assignedDriverId":6}
+
+// id 2 - assigned to driver 7
+{"registrationNo":"MH01CD5678","make":"Tata","model":"Nexon EV","gpsDeviceId":"GPS-DEV-002","status":"ACTIVE","currentOdometer":7420,"assignedDriverId":7}
+
+// id 3 - in maintenance, no driver
+{"registrationNo":"TN22EF9012","make":"Ashok Leyland","model":"Dost","gpsDeviceId":"GPS-DEV-003","status":"MAINTENANCE","currentOdometer":98650}
+
+// id 4 - assigned to driver 6
+{"registrationNo":"KA05GH3456","make":"Mahindra","model":"Bolero","gpsDeviceId":"GPS-DEV-004","status":"ACTIVE","currentOdometer":65320,"assignedDriverId":6}
+
+// id 5 - retired
+{"registrationNo":"DL01JK7890","make":"Tata","model":"407","gpsDeviceId":"GPS-DEV-005","status":"RETIRED","currentOdometer":251500}
+
+
+================================================================================
+3. GEO-FENCES  -  POST /api/geofence      (3 calls, ids 1-3)
+================================================================================
+// id 1 - Bangalore Central Depot
+{"name":"Bangalore Central Depot","latitude":12.971600,"longitude":77.594600,"radiusKm":2.0}
+
+// id 2 - Hosur Plant
+{"name":"Hosur Plant","latitude":12.740900,"longitude":77.825300,"radiusKm":5.0}
+
+// id 3 - Electronic City Hub
+{"name":"Electronic City Hub","latitude":12.845200,"longitude":77.660200,"radiusKm":3.0}
+
+
+================================================================================
+4. TRIPS  -  POST /api/trips              (4 calls; status auto-set to ASSIGNED)
+================================================================================
+// id 1 - completed journey
+{"vehicleId":1,"driverId":6,"origin":"Bangalore Central Depot","destination":"Mysore","plannedStart":"2026-07-20T06:00:00","distanceKm":139.5}
+
+// id 2 - completed journey
+{"vehicleId":2,"driverId":7,"origin":"Bengaluru","destination":"Hosur","plannedStart":"2026-07-21T07:30:00","distanceKm":40.0}
+
+// id 3 - ongoing trip (can POST /api/trips/3/start)
+{"vehicleId":4,"driverId":6,"origin":"MG Road","destination":"Electronic City","plannedStart":"2026-07-22T08:00:00","distanceKm":18.2}
+
+// id 4 - future assignment
+{"vehicleId":1,"driverId":6,"origin":"Hebbal","destination":"Electronic City","plannedStart":"2026-07-24T10:00:00","distanceKm":22.0}
+
+
+================================================================================
+5. FUEL LOGS  -  POST /api/fuel/log
+================================================================================
+{"vehicleId":1,"driverId":6,"quantityLitres":30.5,"cost":2550.00,"date":"2026-07-20"}
+
+{"vehicleId":2,"driverId":7,"quantityLitres":20.0,"cost":1695.00,"date":"2026-07-21"}
+
+{"vehicleId":4,"driverId":6,"quantityLitres":25.0,"cost":2100.00,"date":"2026-07-22"}
+
+
+================================================================================
+6. GPS PINGS  -  POST /api/gps/ping
+   (eventType is auto-computed from speed: >80 = SPEEDING, 0 = IDLE, etc.)
+================================================================================
+{"vehicleId":1,"latitude":12.971600,"longitude":77.594600,"speedKmh":45.2,"recordedAt":"2026-07-20T06:15:00"}
+
+{"vehicleId":1,"latitude":12.950000,"longitude":77.610000,"speedKmh":88.5,"recordedAt":"2026-07-20T06:30:00"}
+
+{"vehicleId":2,"latitude":12.971600,"longitude":77.594600,"speedKmh":52.0,"recordedAt":"2026-07-21T07:45:00"}
+
+{"vehicleId":2,"latitude":12.850000,"longitude":77.660000,"speedKmh":0.0,"recordedAt":"2026-07-21T08:20:00"}
+
+{"vehicleId":4,"latitude":12.977200,"longitude":77.620500,"speedKmh":41.0,"recordedAt":"2026-07-22T08:10:00"}
+
+{"vehicleId":4,"latitude":12.940000,"longitude":77.630000,"speedKmh":22.0,"recordedAt":"2026-07-22T08:40:00"}
+
+
+================================================================================
+7. DOCUMENTS  -  POST /api/documents
+   (status auto-derived from expiryDate: VALID / EXPIRING_SOON / EXPIRED)
+================================================================================
+{"vehicleId":1,"type":"RC","expiryDate":"2031-04-30"}
+
+{"vehicleId":1,"type":"INSURANCE","expiryDate":"2026-09-15"}
+
+{"vehicleId":1,"type":"PUC","expiryDate":"2026-08-10"}
+
+{"vehicleId":2,"type":"RC","expiryDate":"2032-01-31"}
+
+{"vehicleId":2,"type":"INSURANCE","expiryDate":"2027-02-28"}
+
+{"vehicleId":2,"type":"PUC","expiryDate":"2026-10-05"}
+
+{"vehicleId":3,"type":"INSURANCE","expiryDate":"2026-06-10"}
+
+{"vehicleId":4,"type":"INSURANCE","expiryDate":"2027-03-31"}
+
+
+================================================================================
+8. MAINTENANCE ORDERS  -  POST /api/maintenance
+   (status auto-set to SCHEDULED; trigger: SCHEDULE / ODOMETER / OBD)
+================================================================================
+{"vehicleId":3,"serviceType":"Engine Overhaul","trigger":"ODOMETER","scheduledDate":"2026-07-25","cost":18500.00}
+
+{"vehicleId":1,"serviceType":"Oil Change","trigger":"SCHEDULE","scheduledDate":"2026-08-01","cost":3500.00}
+
+{"vehicleId":2,"serviceType":"Brake Pad Replacement","trigger":"ODOMETER","scheduledDate":"2026-07-28","cost":6500.00}
+
+{"vehicleId":4,"serviceType":"Tyre Rotation","trigger":"OBD","scheduledDate":"2026-07-23","cost":1200.00}
+
+
+================================================================================
+================================================================================
