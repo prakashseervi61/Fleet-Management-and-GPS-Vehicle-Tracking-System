@@ -124,7 +124,7 @@ public class DocumentService {
 
     public boolean isCompliant(Long vehicleId) {
         for (Document.DocumentType type : REQUIRED_TYPES) {
-            Document doc = documentRepository.findByVehicleIdAndType(vehicleId, type).orElse(null);
+            Document doc = documentRepository.findTopByVehicleIdAndTypeOrderByExpiryDateDesc(vehicleId, type).orElse(null);
             if (doc == null || doc.getExpiryDate().isBefore(LocalDate.now())) {
                 return false;
             }

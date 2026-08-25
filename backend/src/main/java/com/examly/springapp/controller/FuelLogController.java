@@ -32,7 +32,7 @@ public class FuelLogController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'MAINTENANCE_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'MAINTENANCE_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<List<FuelLog>> getAllLogs() {
         return ResponseEntity.ok(fuelLogService.getAllLogs());
     }
@@ -44,7 +44,7 @@ public class FuelLogController {
     }
 
     @GetMapping("/driver/{driverId}")
-    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<List<FuelLog>> getLogsByDriver(@PathVariable Long driverId) {
         return ResponseEntity.ok(fuelLogService.getLogsByDriver(driverId));
     }

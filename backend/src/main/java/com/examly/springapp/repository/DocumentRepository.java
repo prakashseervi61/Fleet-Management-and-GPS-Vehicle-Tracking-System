@@ -16,7 +16,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     List<Document> findByVehicleId(Long vehicleId);
 
-    Optional<Document> findByVehicleIdAndType(Long vehicleId, Document.DocumentType type);
+    Optional<Document> findTopByVehicleIdAndTypeOrderByExpiryDateDesc(Long vehicleId, Document.DocumentType type);
+
+    List<Document> findByVehicleIdAndType(Long vehicleId, Document.DocumentType type);
 
     List<Document> findByExpiryDateBetween(LocalDate from, LocalDate to);
 

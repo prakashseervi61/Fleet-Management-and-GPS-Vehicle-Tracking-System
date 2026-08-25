@@ -32,19 +32,19 @@ public class TripController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<List<TripResponse>> getAllTrips() {
         return ResponseEntity.ok(tripService.getAllTrips().stream().map(TripResponse::from).toList());
     }
 
     @GetMapping("/active")
-    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<List<TripResponse>> getActiveTrips() {
         return ResponseEntity.ok(tripService.getActiveTrips().stream().map(TripResponse::from).toList());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('LOGISTICS_COORDINATOR', 'FLEET_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<TripResponse> getTrip(@PathVariable Long id) {
         return ResponseEntity.ok(TripResponse.from(tripService.getTripEntity(id)));
     }
