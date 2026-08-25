@@ -18,9 +18,10 @@ import FuelLogFormModal from '../../components/fuel/FuelLogFormModal'
 
 const PAGE_SIZE = 10
 
-function getFirstDayOfMonth() {
+function getDefaultFromDate() {
   const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`
+  d.setDate(d.getDate() - 60)
+  return d.toISOString().split('T')[0]
 }
 
 function getToday() {
@@ -43,7 +44,7 @@ export default function FuelLogsPage() {
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
 
-  const [costFrom, setCostFrom] = useState(getFirstDayOfMonth)
+  const [costFrom, setCostFrom] = useState(getDefaultFromDate)
   const [costTo, setCostTo] = useState(getToday)
   const [totalCost, setTotalCost] = useState(null)
   const [costLoading, setCostLoading] = useState(false)
