@@ -63,7 +63,7 @@ public class FuelLogController {
     }
 
     @GetMapping("/cost")
-    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('FINANCE_OFFICER', 'FLEET_MANAGER', 'MAINTENANCE_MANAGER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<BigDecimal> getTotalCost(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {

@@ -32,13 +32,13 @@ public class VehicleController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('FLEET_MANAGER', 'LOGISTICS_COORDINATOR', 'MAINTENANCE_MANAGER', 'FINANCE_OFFICER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('FLEET_MANAGER', 'LOGISTICS_COORDINATOR', 'MAINTENANCE_MANAGER', 'FINANCE_OFFICER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<List<Vehicle>> getAllVehicles() {
         return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FLEET_MANAGER', 'LOGISTICS_COORDINATOR', 'MAINTENANCE_MANAGER', 'FINANCE_OFFICER', 'SYSTEM_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('FLEET_MANAGER', 'LOGISTICS_COORDINATOR', 'MAINTENANCE_MANAGER', 'FINANCE_OFFICER', 'DRIVER', 'SYSTEM_ADMINISTRATOR')")
     public ResponseEntity<VehicleResponse> getVehicle(@PathVariable Long id) {
         return ResponseEntity.ok(vehicleService.getVehicle(id));
     }

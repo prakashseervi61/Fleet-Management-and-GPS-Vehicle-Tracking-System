@@ -52,12 +52,18 @@ export default function FuelLogsPage() {
     setLoading(true)
     setError(false)
     try {
-      const [logData, vehicleData] = await Promise.all([
+      const [logsRes, vehRes] = await Promise.allSettled([
         getFuelLogs(),
         getVehicles(),
       ])
-      setLogs(logData || [])
-      setVehicles(vehicleData || [])
+      if (logsRes.status === 'fulfilled') {
+        setLogs(logsRes.value || [])
+      } else {
+        setError(true)
+      }
+      if (vehRes.status === 'fulfilled') {
+        setVehicles(vehRes.value || [])
+      }
     } catch {
       setError(true)
     } finally {
