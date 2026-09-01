@@ -55,6 +55,7 @@ The system includes pre-configured test users with password: `Password@123`
 | **Maintenance Manager** | `maintenance@fleet.com` | Vehicle inventory, maintenance work orders, odometer maintenance triggers, fuel logs |
 | **Finance Officer** | `finance@fleet.com` | Maintenance expenditure, fuel expense records, cost aggregation reports |
 | **Driver** | `ravi.driver@fleet.com` | Personal shift dashboard, assigned trip start/complete actions, fuel logging |
+| **Driver** | `suresh.driver@fleet.com` | Personal shift dashboard, assigned trip start/complete actions, fuel logging |
 
 ### RBAC Permission Matrix
 
@@ -199,3 +200,17 @@ AD_-Project/
 │
 └── README.md
 ```
+
+---
+
+## 📦 Loading Sample Data
+
+A pre-built Swagger-UI paste file is included for quickly populating the database after a fresh wipe:
+
+```
+swagger_sample_data.txt
+```
+
+Paste each JSON block into the corresponding Swagger-UI endpoint (in section order: Users → Vehicles → Geo-fences → Trips → Fuel Logs → GPS Pings → Documents → Maintenance). IDs are auto-generated sequentially (1–7, 1–5, 1–3), so FKs stay consistent as long as the database is empty and calls are made in order.
+
+> **Tip**: Register the **Fleet Manager** user first, login via `POST /api/auth/login` to get a JWT, then use the Swagger **Authorize** dialog to unlock all vehicle/trip/write operations.
